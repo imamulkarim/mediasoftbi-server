@@ -152,10 +152,6 @@ def create_prediction_table(regressionModel, db_cursor, onehot_encoder):
   else:
     print('No predictions saved, making new predictions')
 
-    # TODO: Make a table with each item on each day
-    # Example: Butter each day for day 1 - day 31, Detergent each day, etc
-    # Fill month and year column for following month
-
     days = create_prediction_date_range()
     
     features_prediction_table = []
@@ -216,10 +212,22 @@ def make_prediction_api_formatted(categories, db_cursor):
 
   api_formatted = []
 
+  # TODO: each formatted row should be in this shape
+  # {
+  #    "date": ...,
+  #    "past data": ...,
+  #    "prediction": ...
+  # }
+
+  # And should only contain data for one category, not multiple
+
+  # Note: for past dates, "past data" will have a value but "prediction" won't
+  # and for current day and future dates, "prediction" will have a value but "past data" won't
+
   for index, date in enumerate(past_data_dates_formatted):
     formatted_row = {}
     formatted_row["date"] = date
-    formatted_row["past data"] = 10_000
+    formatted_row["past data"] = 10_000 # FIXME: add real data
     
     api_formatted.append(formatted_row)
 
@@ -235,11 +243,5 @@ def make_prediction_api_formatted(categories, db_cursor):
     
     api_formatted.append(formatted_row)
     
-
-  # api_formatted = {
-  #   "dates": dates_formatted,
-  #   "predictions": prediction_selected_categories_api_formatted,
-  # }
-
   return api_formatted
 
